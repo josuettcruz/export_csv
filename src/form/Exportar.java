@@ -4,13 +4,12 @@
  */
 package form;
 
-//Linha 450 -- 14:02 30/03/2025
-
 import file.*;
 import java.util.ArrayList;
 import java.util.List;
 import model.Data;
 import model.Hora;
+import model.Numero;
 
 public class Exportar {
     
@@ -21,6 +20,8 @@ public class Exportar {
     private boolean tag;
     private boolean meta;
     private boolean aspas;
+    private final String h1 = "tema";
+    private final String p = "texto";
     
     public Exportar(csv code, String sent){
         
@@ -199,7 +200,7 @@ public class Exportar {
                         txt += "</q>";
                         this.aspas = false;
                     } else {
-                        txt += "<br/><q>";
+                        txt += "<q>";
                         this.aspas = true;
                     }
                     
@@ -234,13 +235,12 @@ public class Exportar {
                 node = 1;
                 break;
                 
-                case',':
-                case'\"':
-                if(node == 1){node = 2;}
-                break;
-                
                 default:
-                if(node > 0){node = 0;}
+                if(node == 1){
+                    node = 2;
+                } else {
+                    node = 0;
+                }
                 break;
                 
             }//switch(ds)
@@ -272,6 +272,7 @@ public class Exportar {
         for(String tx : dig){
             
             Data d = new Data(tx);
+            Hora h = new Hora(tx);
             
             boolean into_1 = tx.charAt(0) == '(';
             boolean into_2 = tx.charAt(0) == '[';
@@ -321,6 +322,14 @@ public class Exportar {
                 col = 2;
                 
                 txt += d.DataCompleta(true);
+                
+            } else if(h.Val()){//if
+                
+                if(col > 0){txt += "<br/>";}
+                
+                col = 2;
+                
+                txt += h.getNodeHora(true);
                 
             } else if(into && Tx(tx)){//if
                 
@@ -382,11 +391,11 @@ public class Exportar {
         
         if(d.Val()){
             
-            return "<p class=\"texto\">" + d.DataCompleta(true) + "</p>";
+            return "<p class=\"" + this.p + "\">" + d.DataCompleta(true) + "</p>";
             
         } else {
         
-            return "<p class=\"texto\">" + T(paragraphy) + "</p>";
+            return "<p class=\"" + this.p + "\">" + T(paragraphy) + "</p>";
         
         }
         
@@ -394,7 +403,7 @@ public class Exportar {
     
     private String P(String paragraphy, String link){
         
-        String txt = "<p class=\"texto\"><a href=\"";
+        String txt = "<p class=\"" + this.p + "\"><a href=\"";
         txt += link;
         txt += "\" target=\"_blank\">";
         
@@ -473,9 +482,9 @@ public class Exportar {
             "mov"
         };
         
-        for(String p : ext){
+        for(String g : ext){
             
-            if(p.equalsIgnoreCase(text)){val = true;break;}
+            if(g.equalsIgnoreCase(text)){val = true;break;}
             
         }//for(String p : ext)
         
@@ -659,6 +668,10 @@ public class Exportar {
                     ext_val = true;
                     arquivo++;
                     sub_arq = 1;
+                } else if(new Numero(this.code.Read(x, 0)).Val()){
+                    ext_val = false;
+                    arquivo = 0;
+                    sub_arq = 1;
                 } else {
                     sub_arq++;
                 }
@@ -676,7 +689,7 @@ public class Exportar {
                         } else if(ext_val){
                             tx += "cabecalho";
                         } else {
-                            tx += "tema";
+                            tx += this.h1;
                         }
                         
                         tx += "\">";
@@ -687,7 +700,9 @@ public class Exportar {
                                 
                                 tx += "VÍDEO: ";
                                 tx += Numb(arquivo);
-                                tx += "</h1><div class=\"space\"></div><h1 class=\"tema\">";
+                                tx += "</h1><div class=\"space\"></div><h1 class=\"";
+                                tx += this.h1;
+                                tx += "\">";
                                 tx += ext;
                                 
                             } else {//if(sub_arq == 1)
@@ -699,17 +714,23 @@ public class Exportar {
                                 
                             }//if(sub_arq == 1)
                             
+                        } else {//if(ext_val)
+                            
+                            tx += T(this.code.Read(x, 0));
+                            
                         }//if(ext_val)
                         
                         if(sub_arq > 1){
                             
                             if(ext_val){
-                                tx += "</h1><div class=\"space\"></div><h1 class=\"tema\">";
+                                tx += "</h1><div class=\"space\"></div><h1 class=\"";
+                                tx += this.h1;
+                                tx += "\">";
                             }
                             
-                            tx += this.code.Read(x, 0).replace(" | ", "<br/>");
+                            tx += T(this.code.Read(x, 0));
                             
-                        }//if(!ext.equalsIgnoreCase(this.code.Read(x, 0)))
+                        }
                         
                         tx += "</h1>";
                         
