@@ -716,7 +716,21 @@ public class Exportar {
                             
                         } else {//if(ext_val)
                             
-                            tx += T(this.code.Read(x, 0));
+                            int numer = new Numero(this.code.Read(x, 0)).Num();
+                            
+                            if(numer == 0){
+                                
+                                tx += T(this.code.Read(0, 0));
+                                
+                            } else if(numer <= this.code.Tot()){//if(numer == 0)
+                                
+                                tx += T(this.code.Read(numer-1, 0));
+                                
+                            } else {//if(numer == 0)
+                                
+                                tx += name;
+                                
+                            }//if(numer == 0)
                             
                         }//if(ext_val)
                         
