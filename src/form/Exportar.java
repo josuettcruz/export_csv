@@ -654,7 +654,8 @@ public class Exportar {
         doc.add("<body>");
         doc.add("");
         
-        int sub_arq = 1;
+        final int into_arq = 1;
+        int sub_arq = into_arq;
         int arquivo = 0;
         
         if(cd){//if(cd) - 1
@@ -663,90 +664,77 @@ public class Exportar {
                 
                 if(mpeg(this.code.Read(x, 0))){
                     int max = this.code.Read(x, 0).lastIndexOf(".");
-                    ext = this.code.Read(x, 0).substring(0,max).toUpperCase();
-                    ext += this.code.Read(x, 0).substring(max).toLowerCase();
+                    ext = this.code.Read(x, 0).substring(0,max);
                     ext_val = true;
                     arquivo++;
-                    sub_arq = 1;
+                    sub_arq = into_arq;
                 } else if(new Numero(this.code.Read(x, 0)).Val()){
                     ext_val = false;
                     arquivo = 0;
-                    sub_arq = 1;
+                    sub_arq = into_arq;
                 } else {
                     sub_arq++;
                 }
                 
-                String tx = "<div class=\"txt\">";
+                String tx = "";
                 
                 for(int y = 0; y < this.code.Tot(x); y++){
                     
                     if(y == 0){
                         
-                        tx += "<h1 class=\"";
-                        
-                        if(ext_val && sub_arq == 1){
-                            tx += "arquivo";
-                        } else if(ext_val){
-                            tx += "cabecalho";
-                        } else {
-                            tx += this.h1;
-                        }
-                        
-                        tx += "\">";
+                        tx += "<div class=\"txt\">";
                         
                         if(ext_val){
                             
-                            if(sub_arq == 1){
+                            if(sub_arq == into_arq){
                                 
-                                tx += "VÍDEO: ";
+                                tx += "<h1 class=\"arquivo\">";
                                 tx += Numb(arquivo);
                                 tx += "</h1><div class=\"space\"></div><h1 class=\"";
                                 tx += this.h1;
                                 tx += "\">";
                                 tx += ext;
+                                tx += "</h1>";
                                 
                             } else {//if(sub_arq == 1)
                                 
-                                tx += "(";
+                                tx += "<h1 class=\"cabecalho\">";
                                 tx += Numb(sub_arq);
-                                tx += ") ";
+                                tx += "</h1><div class=\"space\"></div><h1 class=\"cabecalho\">";
                                 tx += ext;
+                                tx += "<h1>";
                                 
                             }//if(sub_arq == 1)
                             
                         } else {//if(ext_val)
                             
-                            int numer = new Numero(this.code.Read(x, 0)).Num();
+                            Numero numer = new Numero(this.code.Read(x, 0));
                             
-                            if(numer == 0){
+                            tx += "<h1 class=\"";
+                            tx += this.h1;
+                            tx += "\">";
+                            
+                            if(numer.Num() == 0 && numer.Val()){
                                 
-                                tx += T(this.code.Read(0, 0));
+                                tx += T(this.code.Read(numer.Num(), 0));
                                 
-                            } else if(numer <= this.code.Tot()){//if(numer == 0)
+                            } else if(numer.Num() <= this.code.Max() && numer.Val()){//if(numer == 0)
                                 
-                                tx += T(this.code.Read(numer-1, 0));
+                                tx += T(this.code.Read(numer.Num()-1, 0));
                                 
-                            } else {//if(numer == 0)
+                            } else if(numer.Val()){
                                 
                                 tx += name;
                                 
+                            } else {//if(numer == 0)
+                                
+                                tx += tx += T(this.code.Read(x, 0));
+                                
                             }//if(numer == 0)
                             
+                            tx += "</h1>";
+                            
                         }//if(ext_val)
-                        
-                        if(sub_arq > 1){
-                            
-                            if(ext_val){
-                                tx += "</h1><div class=\"space\"></div><h1 class=\"";
-                                tx += this.h1;
-                                tx += "\">";
-                            }
-                            
-                            tx += T(this.code.Read(x, 0));
-                            
-                        }
-                        
-                        tx += "</h1>";
                         
                     } else {//if(y == 0)
                         

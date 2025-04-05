@@ -16,10 +16,6 @@ public class Hora {
     private LocalTime hora;
     private String error;
     
-    public Hora(){
-        this.hora = LocalTime.now();
-    }
-    
     public Hora(LocalTime hora){
         this.hora = hora;
     }
@@ -44,25 +40,9 @@ public class Hora {
             timer = timer - timer*2;
         }
         
-        int hs[] = {
-            round(timer/(60*60)),
-            round(timer/60),
-            timer % 60
-        };
-        
-        for(int temp = 0; temp < hs.length; temp++){
-            
-            int max = temp == 0 ? 23 : 59;
-            
-            if(hs[temp] >= max){
-                
-                hs[temp] = max;
-                
-            }//if(hs[temp] >= max)
-            
-        }//for(int temp = 0; temp < hs.length; temp++)
-        
-        this.hora = LocalTime.of(hs[0],hs[1],hs[2]);
+        this.hora = LocalTime.of(round(timer/(60*60)),
+                round(timer/(60*60)) % 60,
+                timer % 60);
         
     }//Hora(int timer)
     
@@ -415,10 +395,6 @@ public class Hora {
         
         int h = this.hora.getHour();
         int m = this.hora.getMinute();
-        
-        if(h < 10){
-            txt += "0";
-        }
         
         txt += h;
         txt += sep;
