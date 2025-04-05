@@ -15,6 +15,15 @@ public class Exportar {
     
     private csv code;
     
+    private final int max_end_separator_paragraphy = 100;
+    
+    private final String ext[] = {
+            "avi",
+            "mpg",
+            "mp4",
+            "mov"
+        };
+    
     private String host;
     
     private boolean tag;
@@ -197,6 +206,7 @@ public class Exportar {
                 case'\"' ->{
                     
                     if(this.aspas){
+                        
                         txt += "</q>";
                         this.aspas = false;
                     } else {
@@ -279,6 +289,12 @@ public class Exportar {
             boolean into_3 = tx.charAt(0) == '{';
             boolean into = into_1 || into_2 || into_3;
             
+            int end_num = tx.length() > 1 ? tx.length()-1 : 0;
+            boolean end_1 = tx.charAt(end_num) == '.';
+            boolean end_2 = tx.charAt(end_num) == '!';
+            boolean end_3 = tx.charAt(end_num) == '?';
+            boolean end = end_1 || end_2 || end_3;
+            
             String node = "";
             
             switch(col){
@@ -355,7 +371,15 @@ public class Exportar {
                 
                 txt += phrase(tx, col);
                 
-            } else {
+            } else if(end && text.length() >= this.max_end_separator_paragraphy){//if
+                
+                txt += node;
+                
+                col = 2;
+                
+                txt += phrase(tx, col);
+                
+            } else {//if
                 
                 txt += node;
                 
@@ -475,14 +499,9 @@ public class Exportar {
             
         }//for(int a = 0; a < txt.length(); a++)
         
-        final String ext[] = {
-            "avi",
-            "mpg",
-            "mp4",
-            "mov"
-        };
+
         
-        for(String g : ext){
+        for(String g : this.ext){
             
             if(g.equalsIgnoreCase(text)){val = true;break;}
             
@@ -500,8 +519,22 @@ public class Exportar {
         
         List<String> doc = new ArrayList();
         
-        String ext = "";
+        String arq_1 = "";
+        String arq_2 = "";
         boolean ext_val = false;
+        final int into_arq = 0;
+        int sub_arq = into_arq;
+        int arquivo = 0;
+            
+        boolean extend = false;
+        int ex = 0;
+
+        while(ex < this.code.Tot() && !extend){
+
+            if(mpeg(this.code.Read(ex, 0))){extend = true;}
+            ex++;
+
+        }//while(ex < this.code.Tot() && !extend)
         
         boolean cd = this.code.Tot() > 0;
         
@@ -574,16 +607,6 @@ public class Exportar {
             doc.add("      background-color:black;");
             doc.add("   }");
             
-            boolean extend = false;
-            int ex = 0;
-            
-            while(ex < this.code.Tot() && !extend){
-                
-                if(mpeg(this.code.Read(ex, 0))){extend = true;}
-                ex++;
-                
-            }//while(ex < this.code.Tot() && !extend)
-            
             if(extend){
                 
                 doc.add("   h1.arquivo{");
@@ -599,8 +622,9 @@ public class Exportar {
                 doc.add("      color:black;");
                 doc.add("      margin-left:5%;");
                 doc.add("      font-weight: normal;");
-                doc.add("      font-size:calc(10px + 1vw);");
+                doc.add("      font-size:calc(15px + 1vw);");
                 doc.add("      font-family: \"Kavoon\";");
+                doc.add("      line-height:2em;");
                 doc.add("      word-wrap: break-word;");
                 doc.add("   }");
                 
@@ -654,17 +678,15 @@ public class Exportar {
         doc.add("<body>");
         doc.add("");
         
-        final int into_arq = 1;
-        int sub_arq = into_arq;
-        int arquivo = 0;
-        
         if(cd){//if(cd) - 1
             
             for(int x = 0; x < this.code.Tot(); x++){
                 
                 if(mpeg(this.code.Read(x, 0))){
                     int max = this.code.Read(x, 0).lastIndexOf(".");
-                    ext = this.code.Read(x, 0).substring(0,max);
+                    arq_1 = this.code.Read(x, 0);
+                    arq_2 = this.code.Read(x, 0).substring(0,max).toUpperCase();
+                    arq_2 += this.code.Read(x, 0).substring(max);
                     ext_val = true;
                     arquivo++;
                     sub_arq = into_arq;
@@ -688,21 +710,25 @@ public class Exportar {
                             
                             if(sub_arq == into_arq){
                                 
-                                tx += "<h1 class=\"arquivo\">";
+                                tx += "<h1 class=\"arquivo\">VÍDEO: ";
                                 tx += Numb(arquivo);
-                                tx += "</h1><div class=\"space\"></div><h1 class=\"";
+                                tx += "</h1></h1><div class=\"space\"></div><h1 class=\"";
                                 tx += this.h1;
                                 tx += "\">";
-                                tx += ext;
+                                tx += arq_1;
                                 tx += "</h1>";
                                 
                             } else {//if(sub_arq == 1)
                                 
                                 tx += "<h1 class=\"cabecalho\">";
                                 tx += Numb(sub_arq);
-                                tx += "</h1><div class=\"space\"></div><h1 class=\"cabecalho\">";
-                                tx += ext;
-                                tx += "<h1>";
+                                tx += "<br/>";
+                                tx += arq_2;
+                                tx += "</h1></h1><div class=\"space\"></div><h1 class=\"";
+                                tx += this.h1;
+                                tx += "\">";
+                                tx += T(this.code.Read(x, 0));
+                                tx += "</h1>";
                                 
                             }//if(sub_arq == 1)
                             
@@ -728,7 +754,7 @@ public class Exportar {
                                 
                             } else {//if(numer == 0)
                                 
-                                tx += tx += T(this.code.Read(x, 0));
+                                tx += T(this.code.Read(x, 0));
                                 
                             }//if(numer == 0)
                             
@@ -776,7 +802,8 @@ public class Exportar {
                 
             }//for(int x = 0; x < this.code.Tot(); x++)
             
-            ext = "";
+            arq_1 = "";
+            arq_2 = "";
             ext_val = false;
             
             doc.add("");
