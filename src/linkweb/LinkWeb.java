@@ -26,9 +26,7 @@ public class LinkWeb {
         System.out.println(upgrade.DataLinha(true));
         System.out.println();
         
-        String set_title = "Hoje é dia ";
-        set_title += new Data().DataCompleta(false);
-        set_title += "! projeto atualizado ";
+        String set_title = "Projeto atualizado ";
         set_title += upgrade.DataLinha(false);
         set_title += "!";
         

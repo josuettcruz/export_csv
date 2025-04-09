@@ -451,7 +451,7 @@ public class Data {
             if(ifo){
                 txt += "ANO PASSADO";
             } else {
-                txt += "ano passado";
+                txt += "no ano passado";
             }
             
         } else if(ag > at){//if
