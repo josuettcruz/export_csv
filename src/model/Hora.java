@@ -204,7 +204,7 @@ public class Hora {
                 
                 this.hora = LocalTime.of(hour, minute, 0);
                 
-            } else if(time.matches("[0-9]{2}[:][0-9]{2}[:][0-9]{2}")){
+            } else if(time.matches("[0-9]{2}[:][0-9]{2}[:][0-9]{2}") || time.matches("[0-9]{2}[-][0-9]{2}[-][0-9]{2}")){
                 
                 for(int i = 0; i < 8; i++){
                     

@@ -545,7 +545,7 @@ public class Exportar {
         List<Integer> one_vcr = new ArrayList();
         List<Integer> max_vcr = new ArrayList();
         
-        int one = 1;
+        int one = 0;
         
         if(cd){
             
@@ -555,7 +555,7 @@ public class Exportar {
                 
                 if(enter){
                     
-                    one = 1;
+                    one = 0;
                     
                 } else {//if(enter)
                     
@@ -796,15 +796,26 @@ public class Exportar {
                         
                         case "avi" ->{
                             
-                            arq_1 += "VÍDEO: ";
+                            // https://www.anymp4.com/pt/glossary/what-is-avi.html
+                            
+                            arq_1 += "Audio & Video Interleave</h1><div class=\"space\"></div><h1 class=\"arquivo\">VÍDEO: ";
                             arq_1 += Numb(arquivo+1);
                             
                         }//case "avi"
                         
+                        case "mov" ->{
+                            
+                            // https://www.cloudflare.com/pt-br/learning/video/mov-vs-mp4/
+                            
+                            arq_1 += "QuickTime Player</h1><div class=\"space\"></div><h1 class=\"arquivo\">VÍDEO: ";
+                            arq_1 += Numb(arquivo+1);
+                            
+                        }//case "mov"
+                        
                         default ->{
                             
                             arq_1 += "</h1><div class=\"space\"></div><h1 class=\"arquivo\">[";
-                            arq_1 += this.code.Read(x, 0).substring(0,max+1).toUpperCase();
+                            arq_1 += this.code.Read(x, 0).substring(max+1).toUpperCase();
                             arq_1 += "] - ";
                             arq_1 += Numb(arquivo+1);
                             
