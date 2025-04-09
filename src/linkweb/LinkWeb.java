@@ -20,10 +20,11 @@ public class LinkWeb {
     public static void main(String[] args) {
         
         Data upgrade = new Data(LocalDate.of(2025, 4, 9));
-        
+            
         System.out.println("Projeto:\t\tExportCSV");
         System.out.print("Última atualização:\t");
         System.out.println(upgrade.DataLinha(true));
+        System.out.println();
         
         String set_title = "Hoje é dia ";
         set_title += new Data().DataCompleta(false);
@@ -32,8 +33,6 @@ public class LinkWeb {
         set_title += "!";
         
         new Index().Enter(set_title);
-        
-        System.out.println();
         
     }
     

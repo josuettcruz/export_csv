@@ -478,6 +478,29 @@ public class Exportar {
         
     }//Numb(int numb)
     
+    private String Numb(int num, int max){
+        
+        if(num < 0){
+            num = num - num*2;
+        }
+        
+        String txt = "";
+        
+        if(max >= 10 && num < 10){txt += "0";}
+        if(max >= 100 && num < 100){txt += "0";}
+        if(max >= 1000 && num < 1000){txt += "0";}
+        if(max >= 10000 && num < 10000){txt += "0";}
+        if(max >= 100000 && num < 100000){txt += "0";}
+        if(max >= 1000000 && num < 1000000){txt += "0";}
+        
+        txt += num;
+        txt += " de ";
+        txt += max;
+        
+        return txt;
+        
+    }//Numb(int numb)
+    
     private boolean mpeg(String txt){
         
         boolean val = false;
@@ -513,9 +536,76 @@ public class Exportar {
     
     public void Export(String name){
         
+        cod c = new cod();
+        
         final int max_char_title = 80;
         
-        cod c = new cod();
+        boolean cd = this.code.Tot() > 0;
+        
+        List<Integer> one_vcr = new ArrayList();
+        List<Integer> max_vcr = new ArrayList();
+        
+        int one = 1;
+        
+        if(cd){
+            
+            for(int next = 0; next < this.code.Tot(); next++){
+                
+                boolean enter = mpeg(this.code.Read(next, 0));
+                
+                if(enter){
+                    
+                    one = 1;
+                    
+                } else {//if(enter)
+                    
+                    one = one + 1;
+                    
+                }//if(enter)
+                
+                one_vcr.add(one);
+                
+            }//for(int next = 0; next < this.code.Tot(); next++)
+            
+            int prev[] = new int[this.code.Tot()];
+            int max_vcr_var = 0;
+            boolean tematic = false;
+            
+            for(int rew = this.code.Tot()-1; rew >= 0; rew--){
+                
+                Numero d = new Numero(this.code.Read(rew, 0));
+                boolean valid = d.Val() && d.Num() == 0;
+                
+                boolean enter = mpeg(this.code.Read(rew, 0));
+                
+                if(rew < one_vcr.size()){
+                    
+                if(tematic){
+                    
+                    max_vcr_var = one_vcr.get(rew);
+                    tematic = false;
+                    
+                }//if(tematic)
+                
+                if(valid || enter){
+                    
+                    tematic = true;
+                    
+                }//if(valid || enter)
+                
+                }//if(rew < one_vcr.size())
+                
+                prev[rew] = max_vcr_var;
+                
+            }//for(int rew = this.code.Tot()-1; rew >= 0; rew--)
+            
+            for(int ad : prev){
+                
+                max_vcr.add(ad);
+                
+            }//for(int ad : prev)
+            
+        }//if(cd)
         
         List<String> doc = new ArrayList();
         
@@ -535,8 +625,6 @@ public class Exportar {
             ex++;
 
         }//while(ex < this.code.Tot() && !extend)
-        
-        boolean cd = this.code.Tot() > 0;
         
         String select_title;
         
@@ -695,7 +783,7 @@ public class Exportar {
                         case "mpg" ->{
                             
                             arq_1 += "[MPEG-2]</h1><div class=\"space\"></div><h1 class=\"arquivo\">VÍDEO: ";
-                            arq_1 += Numb(arquivo);
+                            arq_1 += Numb(arquivo+1);
                             
                         }//case "mpg"
                         
@@ -766,8 +854,14 @@ public class Exportar {
                             } else {//if(sub_arq == 1)
                                 
                                 tx += "<h1 class=\"cabecalho\">";
-                                tx += Numb(sub_arq);
-                                tx += "<br/>";
+                                
+                                if(x < one_vcr.size() && x < max_vcr.size()){
+                                    
+                                    tx += Numb(one_vcr.get(x),max_vcr.get(x));
+                                    tx += "</h1><div class=\"space\"></div><h1 class=\"cabecalho\">";
+                                    
+                                }//if(x < one_vcr.size())
+                                
                                 tx += arq_2;
                                 tx += "</h1></h1><div class=\"space\"></div><h1 class=\"";
                                 tx += this.h1;
