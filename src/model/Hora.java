@@ -40,9 +40,11 @@ public class Hora {
             timer = timer - timer*2;
         }
         
-        this.hora = LocalTime.of(round(timer/(60*60)),
-                round(timer/(60*60)) % 60,
-                timer % 60);
+        this.hora = LocalTime.of(
+                round(timer/(60*60)) % 60 >= 23 ? 23 : round(timer/(60*60)) % 60,
+                round(timer/60) % 60,
+                timer % 60
+        );
         
     }//Hora(int timer)
     
@@ -202,7 +204,7 @@ public class Hora {
                 
                 this.hora = LocalTime.of(hour, minute, 0);
                 
-            } else if(time.matches("[0-9]{2}[-][0-9]{2}[-][0-9]{2}") || time.matches("[0-9]{2}[:][0-9]{2}[:][0-9]{2}")){
+            } else if(time.matches("[0-9]{2}[:][0-9]{2}[:][0-9]{2}")){
                 
                 for(int i = 0; i < 8; i++){
                     
@@ -284,7 +286,7 @@ public class Hora {
                 
                 this.hora = LocalTime.of(hour, minute, second);
                 
-            } else if(time.matches("[0-9]{2}[-][0-9]{2}") || time.matches("[0-9]{2}[:][0-9]{2}")){
+            } else if(time.matches("[0-9]{2}[:][0-9]{2}")){
                 
                 for(int i = 0; i < 5; i++){
                     

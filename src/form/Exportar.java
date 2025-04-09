@@ -688,39 +688,47 @@ public class Exportar {
                     
                     int max = this.code.Read(x, 0).lastIndexOf(".");
                     
-                    arq_1 = "[";
+                    arq_1 = "<h1 class=\"arquivo\">";
                     
                     switch(this.code.Read(x, 0).substring(max+1).toLowerCase()){
                         
                         case "mpg" ->{
                             
-                            arq_1 += "MPEG-2";
+                            arq_1 += "[MPEG-2]</h1><div class=\"space\"></div><h1 class=\"arquivo\">VÍDEO: ";
+                            arq_1 += Numb(arquivo);
                             
                         }//case "mpg"
                         
                         case "mp4" ->{
                             
-                            arq_1 += "MPEG-4";
+                            arq_1 += "[MPEG-4]</h1><div class=\"space\"></div><h1 class=\"arquivo\">VÍDEO: ";
+                            arq_1 += Numb(arquivo+1);
                             
                         }//case "mp4"
                         
                         case "avi" ->{
                             
-                            arq_1 += "ÁUDIO & VÍDEO";
+                            arq_1 += "VÍDEO: ";
+                            arq_1 += Numb(arquivo+1);
                             
                         }//case "avi"
                         
                         default ->{
                             
+                            arq_1 += "</h1><div class=\"space\"></div><h1 class=\"arquivo\">[";
                             arq_1 += this.code.Read(x, 0).substring(0,max+1).toUpperCase();
+                            arq_1 += "] - ";
+                            arq_1 += Numb(arquivo+1);
                             
                         }//case "mov"
                         
                     }//switch(this.code.Read(x, 0).substring(0,max+1))
                     
-                    arq_1 += "]<br/>";
+                    arq_1 += "</h1><div class=\"space\"></div><h1 class=\"";
+                    arq_1 += this.h1;
+                    arq_1 += "\">";
                     arq_1 += this.code.Read(x, 0).substring(0,max);
-                    arq_2 = this.code.Read(x, 0).substring(0,max).toUpperCase();
+                    arq_2 = this.code.Read(x, 0).substring(0,max);
                     ext_val = true;
                     arquivo++;
                     sub_arq = into_arq;
@@ -749,11 +757,9 @@ public class Exportar {
                             
                             if(sub_arq == into_arq){
                                 
-                                tx += "<h1 class=\"arquivo\">VÍDEO: ";
-                                tx += Numb(arquivo);
-                                tx += "</h1></h1><div class=\"space\"></div><h1 class=\"";
-                                tx += this.h1;
-                                tx += "\">";
+                                //tx += "<h1 class=\"arquivo\">VÍDEO: ";
+                                //tx += Numb(arquivo);
+                                //tx += "</h1></h1><div class=\"space\"></div><h1 class=\"arquivo\">";
                                 tx += arq_1;
                                 tx += "</h1>";
                                 
@@ -797,14 +803,14 @@ public class Exportar {
                         
                         if(c.Link(this.code.Read(x, y))){
                             
-                            tx += "<div class=\"space\"></div>";
-                            
                             if(c.Link(this.code.Read(x, y-1))){
                                 
+                                tx += "<div class=\"space\"></div>";
                                 tx += P(this.code.Read(x, y),this.code.Read(x, y));
                                 
                             } else {//if(c.Link(this.code.Read(x, y-1)))
                                 
+                                tx += "<div class=\"space\"></div>";
                                 tx += P(this.code.Read(x, y-1),this.code.Read(x, y));
                                 
                             }//if(c.Link(this.code.Read(x, y-1)))
@@ -838,6 +844,7 @@ public class Exportar {
             ext_val = false;
             
             doc.add("");
+            
             doc.add("<p class=\"ended\"></p>");
             
             if(this.tag){
@@ -872,7 +879,7 @@ public class Exportar {
             
             doc.add("");
             
-            doc.add("<!-- " + name + " --");
+            doc.add("<!-- " + name.trim().replaceAll(" - ", " -- ") + " --");
             
             for(int x = 0; x < this.code.Tot(); x++){
                 
