@@ -682,21 +682,60 @@ public class Exportar {
             
             for(int x = 0; x < this.code.Tot(); x++){
                 
+                Numero number = new Numero(this.code.Read(x, 0));
+                
                 if(mpeg(this.code.Read(x, 0))){
+                    
                     int max = this.code.Read(x, 0).lastIndexOf(".");
-                    arq_1 = this.code.Read(x, 0);
+                    
+                    arq_1 = "[";
+                    
+                    switch(this.code.Read(x, 0).substring(max+1).toLowerCase()){
+                        
+                        case "mpg" ->{
+                            
+                            arq_1 += "MPEG-2";
+                            
+                        }//case "mpg"
+                        
+                        case "mp4" ->{
+                            
+                            arq_1 += "MPEG-4";
+                            
+                        }//case "mp4"
+                        
+                        case "avi" ->{
+                            
+                            arq_1 += "ÁUDIO & VÍDEO";
+                            
+                        }//case "avi"
+                        
+                        default ->{
+                            
+                            arq_1 += this.code.Read(x, 0).substring(0,max+1).toUpperCase();
+                            
+                        }//case "mov"
+                        
+                    }//switch(this.code.Read(x, 0).substring(0,max+1))
+                    
+                    arq_1 += "]<br/>";
+                    arq_1 += this.code.Read(x, 0).substring(0,max);
                     arq_2 = this.code.Read(x, 0).substring(0,max).toUpperCase();
-                    arq_2 += this.code.Read(x, 0).substring(max);
                     ext_val = true;
                     arquivo++;
                     sub_arq = into_arq;
-                } else if(new Numero(this.code.Read(x, 0)).Val()){
+                    
+                } else if(number.Val() && number.Num() == 0){//if(mpeg(this.code.Read(x, 0)))
+                    
                     ext_val = false;
                     arquivo = 0;
                     sub_arq = into_arq;
-                } else {
+                    
+                } else {//if(mpeg(this.code.Read(x, 0)))
+                    
                     sub_arq++;
-                }
+                    
+                }//if(mpeg(this.code.Read(x, 0)))
                 
                 String tx = "";
                 
@@ -742,21 +781,13 @@ public class Exportar {
                             
                             if(numer.Num() == 0 && numer.Val()){
                                 
-                                tx += T(this.code.Read(numer.Num(), 0));
+                                tx += T(this.code.Read(0, 0));
                                 
-                            } else if(numer.Num() <= this.code.Max() && numer.Val()){//if(numer == 0)
-                                
-                                tx += T(this.code.Read(numer.Num()-1, 0));
-                                
-                            } else if(numer.Val()){
-                                
-                                tx += name;
-                                
-                            } else {//if(numer == 0)
+                            } else {//if(numer.Num() == 0 && numer.Val())
                                 
                                 tx += T(this.code.Read(x, 0));
                                 
-                            }//if(numer == 0)
+                            }//if(numer.Num() == 0 && numer.Val())
                             
                             tx += "</h1>";
                             

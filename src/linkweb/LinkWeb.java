@@ -4,7 +4,9 @@
  */
 package linkweb;
 
+import model.Data;
 import form.Index;
+import java.time.LocalDate;
 
 /**
  *
@@ -17,8 +19,20 @@ public class LinkWeb {
      */
     public static void main(String[] args) {
         
-        Index into = new Index();
-        into.Enter(false);
+        Data upgrade = new Data(LocalDate.of(2025, 4, 8));
+        
+        System.out.println("Projeto:\t\texport_csv");
+        System.out.print("Última atualização:\t");
+        System.out.println(upgrade.DataLinha(true));
+        System.out.println();
+        
+        String set_title = "Hoje é dia ";
+        set_title += new Data().DataCompleta(false);
+        set_title += "! projeto atualizado ";
+        set_title += upgrade.DataLinha(false);
+        set_title += "!";
+        
+        new Index().Enter(set_title);
         
     }
     

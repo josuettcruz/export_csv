@@ -21,16 +21,16 @@ public class Index extends javax.swing.JFrame {
         
     }
     
-    private void Enter(){
+    public void Enter(String title){
         
-        setTitle(new Data().DataCompleta(true));
+        setTitle(title);
         setVisible(true);
         setResizable(false);
         setLocation(Location.x,Location.y);
         
     }
     
-    public void Enter(boolean exit){
+    /*public void Enter(boolean exit){
         
         Enter();
         
@@ -40,7 +40,7 @@ public class Index extends javax.swing.JFrame {
         
         Enter();
         
-    }
+    }*/
 
     /**
      * This method is called from within the constructor to initialize the form.
