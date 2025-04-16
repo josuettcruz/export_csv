@@ -6,6 +6,8 @@ package form;
 
 import file.csv;
 import model.Data;
+import model.Hora;
+import model.Registro;
 
 /**
  *
@@ -13,14 +15,17 @@ import model.Data;
  */
 public class Converter extends javax.swing.JFrame {
     
+    //private String arquivo;
+    
     /**
      * Creates new form Converter
      */
     public Converter() {
         
         initComponents();
+        //this.arquivo = "";
         
-    }
+    }//Converter()
     
     public void Enter(){
         
@@ -34,14 +39,26 @@ public class Converter extends javax.swing.JFrame {
     
     private void Exc(boolean tentar, String tct){
         
-        if(tentar){
+        /*if(tentar){
             
-            System.out.println("Hoje é: " + new Data().DataCompleta(true));
+            System.out.print(this.arquivo);
             System.out.println();
             
-        }
+        }/* if(tentar) */
         
+        System.out.print("Mensagem:");
+        Registro.Tab("Mensagem:", 16);
         System.out.println(tct);
+        
+        System.out.print("Dia:");
+        Registro.Tab("Dia:", 16);
+        System.out.println(new Data().DataCompleta(tentar));
+        
+        System.out.print("Horário:");
+        Registro.Tab("Horário:", 16);
+        System.out.println(new Hora(true).getHora(tentar));
+        System.out.println();
+        
         System.exit(0);
         
     }//Exc(boolean tentar, String tct)
@@ -51,6 +68,8 @@ public class Converter extends javax.swing.JFrame {
         csv cmd = new csv(diretory.replace(".csv",""));
         
         Exportar mht = new Exportar(cmd, folder);
+        
+        //this.arquivo = mht.Arq();
         
         mht.Export(file.substring(0,file.lastIndexOf(".")));
         

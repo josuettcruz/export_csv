@@ -4,6 +4,7 @@
  */
 package model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,18 @@ import java.util.List;
  * @author josue
  */
 public class Registro {
+    
+    public static String github = "https://github.com/josuettcruz/export_csv";
+    
+    public static Data upgrade = new Data(LocalDate.of(2025, 4, 16));
+    
+    public static void Tab(String entrada, int tab){
+        
+        int pg = tab - entrada.length() > 1 ? tab - entrada.length() : 1;
+        
+        System.out.print(" ".repeat(pg));
+        
+    }//Tab(String entrada, int tab)
     
     public static String Title(String text, String separator){
         

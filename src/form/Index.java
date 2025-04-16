@@ -4,7 +4,9 @@
  */
 package form;
 
+import model.Registro;
 import model.Data;
+import model.Hora;
 
 /**
  *
@@ -29,18 +31,6 @@ public class Index extends javax.swing.JFrame {
         setLocation(Location.x,Location.y);
         
     }
-    
-    /*public void Enter(boolean exit){
-        
-        Enter();
-        
-    }
-    
-    public void Enter(String tct){
-        
-        Enter();
-        
-    }*/
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -108,6 +98,13 @@ public class Index extends javax.swing.JFrame {
 
     private void sairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sairActionPerformed
         
+        System.out.print("Encerrado:");
+        Registro.Tab("Encerrado:", 16);
+        System.out.println(new Hora(true).getHora(true));
+        System.out.print("Hoje:");
+        Registro.Tab("Hoje:",16);
+        System.out.println(new Data().DataCompleta(true));
+        System.out.println();
         System.exit(0);
         
     }//GEN-LAST:event_sairActionPerformed

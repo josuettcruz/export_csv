@@ -10,10 +10,13 @@ import java.util.List;
 import model.Data;
 import model.Hora;
 import model.Numero;
+import model.Registro;
 
 public class Exportar {
     
     private csv code;
+    
+    private boolean link;
     
     private final int max_end_separator_paragraphy = 100;
     
@@ -41,6 +44,21 @@ public class Exportar {
         this.tag = false;
         this.meta = false;
         this.aspas = false;
+        
+        for(int col = 0; col < code.Tot(); col++){
+            
+            for(int line = 1; line < code.Tot(col); line++){
+                
+                if(new cod().Link(code.Read(col, line))){
+                    
+                    this.link = true;
+                    break;
+                    
+                }//if(new cod().Link(code.Read(col, line)))
+                
+            }//for(int line = 1; line < code.Tot(col); line++)
+            
+        }//for(int col = 0; col < code.Tot(); col++)
         
     }//Exportar(csv code, String sent)
     
@@ -647,6 +665,8 @@ public class Exportar {
             
         }
         
+        doc.add("<!-- " + Registro.github + " -->");
+        doc.add("<!-- Última atualização: " + Registro.upgrade.DataAbreviada(false) + " -->");
         doc.add("<html>");
         doc.add("<head>");
         doc.add("<title>" + select_title + "</title>");
@@ -660,6 +680,7 @@ public class Exportar {
         
         if(cd){
             
+            /* old **
             doc.add("   a:link, a:hover, a:active, a:visited{");
             doc.add("      font-family: \"Montserrat Underline\";");
             doc.add("      font-weight: bold;");
@@ -750,6 +771,136 @@ public class Exportar {
             doc.add("   p.ended{");
             doc.add("      padding:50px;");
             doc.add("   }");
+            /* old */
+            
+            /* new -- 19:10 16/04/2025 **/
+            if(this.link){
+                
+                doc.add("   /* DEKSTOP **/");
+                doc.add("   a:link, a:active{");
+                doc.add("      font-family: \"Montserrat Underline\";");
+                doc.add("      font-weight: bold;");
+                doc.add("      color: aqua;");
+                doc.add("      text-decoration: none;");
+                doc.add("   }");
+                doc.add("   a:hover, a:visited{");
+                doc.add("      font-family: \"Montserrat Underline\";");
+                doc.add("      font-weight: bold;");
+                doc.add("      color: teal;");
+                doc.add("      text-decoration: none;");
+                doc.add("      border-radius: .5rem;");
+                doc.add("   }");
+                doc.add("   a{");
+                doc.add("      transition: .5s;");
+                doc.add("   }");
+                
+            }// if(this.link) -- 1 de 2
+            
+            doc.add("   h1.arquivo::selection, h1.cabecalho::selection{");
+            doc.add("      color:black;");
+            doc.add("      background-color: wheat;");
+            doc.add("   }");
+            
+            if(this.link){
+                
+                doc.add("   h1.tema::selection, p.texto::selection{");
+                doc.add("      color:black;");
+                doc.add("      background-color: white;");
+                doc.add("   }");
+                doc.add("   a::selection{");
+                doc.add("      color: white;");
+                doc.add("      background-color: teal;");
+                doc.add("   }/* DEKSTOP */");
+                doc.add("   ");
+                doc.add("   /* MOBILE **");
+                doc.add("   a:link, a:hover, a:active, a:visited{");
+                doc.add("      font-family: \"Montserrat Underline\";");
+                doc.add("      font-weight: bold;");
+                doc.add("      color: aqua;");
+                doc.add("      text-decoration: none;");
+                doc.add("   }/* MOBILE */");
+                doc.add("   ");
+                
+            }// if(this.link) -- 2 de 2
+            
+            doc.add("   body{");
+            doc.add("      background-color:black;");
+            doc.add("   }");
+            doc.add("   ");
+            doc.add("   div.txt{");
+            doc.add("      margin-left:5%;");
+            doc.add("      margin-top:10%;");
+            doc.add("      width:90%;");
+            doc.add("      border: 5px solid white;");
+            doc.add("      background-color:transparent;");
+            doc.add("      min-height:100px;");
+            doc.add("      overflow-y:visible;");
+            doc.add("      border-radius: 2em;");
+            doc.add("   }");
+            doc.add("   ");
+            doc.add("   div.space{");
+            doc.add("      width:100%;");
+            doc.add("      height:5px;");
+            doc.add("      background-color:white;");
+            doc.add("   }");
+            
+            if(extend){
+                
+                doc.add("   ");
+                doc.add("   h1.arquivo{");
+                doc.add("      color:white;");
+                doc.add("      margin-left:5%;");
+                doc.add("      font-weight: normal;");
+                doc.add("      font-size:calc(30px + 1vw);");
+                doc.add("      font-family: \"Poppins\";");
+                doc.add("      word-wrap: break-word;");
+                doc.add("   }");
+                doc.add("   ");
+                doc.add("   h1.cabecalho{");
+                doc.add("      color:white;");
+                doc.add("      margin-left:5%;");
+                doc.add("      font-weight: normal;");
+                doc.add("      font-size:calc(20px + 1vw);");
+                doc.add("      font-family: \"Roboto\";");
+                doc.add("      word-wrap: break-word;");
+                doc.add("      line-height:2em;");
+                doc.add("   }");
+                
+            }//if(extend)
+            
+            doc.add("   ");
+            doc.add("   h1.tema{");
+            doc.add("      color:white;");
+            doc.add("      margin-left:3%;");
+            doc.add("      font-weight: normal;");
+            doc.add("      font-size:calc(20px + 1vw);");
+            doc.add("      font-family: \"Sofia Sans Extra Condensed\";");
+            doc.add("      word-wrap: break-word;");
+            doc.add("      line-height:2em;");
+            doc.add("   }");
+            doc.add("   ");
+            doc.add("   p.texto{");
+            doc.add("      color:white;");
+            doc.add("      margin-top:10px;");
+            doc.add("      margin-left:2%;");
+            doc.add("      margin-right:1%;");
+            doc.add("      font-weight: normal;");
+            doc.add("      font-size:calc(10px + 1vw);");
+            doc.add("      font-family: \"Winky Sans\";");
+            doc.add("      word-wrap: break-word;");
+            doc.add("      line-height:2em;");
+            doc.add("   }");
+            doc.add("   ");
+            doc.add("   div.divide{");
+            doc.add("      width:100%;");
+            doc.add("      height:20px;");
+            doc.add("      background-color:transparent;");
+            doc.add("   }");
+            doc.add("   ");
+            doc.add("   p.ended{");
+            doc.add("      padding:50px;");
+            doc.add("   }");
+            /* new */
             
         } else {
             
@@ -798,7 +949,7 @@ public class Exportar {
                             
                             // https://www.anymp4.com/pt/glossary/what-is-avi.html
                             
-                            arq_1 += "Audio & Video Interleave</h1><div class=\"space\"></div><h1 class=\"arquivo\">VÍDEO: ";
+                            arq_1 += "Audio & Video</h1><h1 class=\"arquivo\">Interleave</h1><div class=\"space\"></div><h1 class=\"arquivo\">VÍDEO: ";
                             arq_1 += Numb(arquivo+1);
                             
                         }//case "avi"
@@ -827,7 +978,7 @@ public class Exportar {
                     arq_1 += this.h1;
                     arq_1 += "\">";
                     arq_1 += this.code.Read(x, 0).substring(0,max);
-                    arq_2 = this.code.Read(x, 0).substring(0,max);
+                    arq_2 = this.code.Read(x, 0);
                     ext_val = true;
                     arquivo++;
                     sub_arq = into_arq;
@@ -868,7 +1019,7 @@ public class Exportar {
                                 
                                 if(x < one_vcr.size() && x < max_vcr.size()){
                                     
-                                    tx += Numb(one_vcr.get(x),max_vcr.get(x));
+                                    tx += max_vcr.get(x) > 0 ? Numb(one_vcr.get(x),max_vcr.get(x)) : Numb(one_vcr.get(x));
                                     tx += "</h1><div class=\"space\"></div><h1 class=\"cabecalho\">";
                                     
                                 }//if(x < one_vcr.size())
@@ -984,7 +1135,42 @@ public class Exportar {
             
             doc.add("");
             
-            doc.add("<!-- " + name.trim().replaceAll(" - ", " -- ") + " --");
+            doc.add("<!-- Arquivo: \"" + name + ".csv\" --");
+            
+            for(int pg = 1; pg <= this.code.Tot(); pg++){
+                
+                doc.add("");
+                
+                String pos = "Item ";
+                
+                pos += Numb(pg,this.code.Tot());
+                
+                doc.add("_".repeat(pos.length()));
+                
+                doc.add(pos);
+                
+                doc.add("");
+                
+                for(int l = 0; l < this.code.Tot(pg-1); l++){
+                    
+                    doc.add(this.code.Read((pg-1), l));
+                    
+                }//for(int l = 0; l < this.code.Tot(p); l++)
+                
+                String re = this.code.Read(pg-1, this.code.Tot(pg-1)-1);
+                
+                if(re.length() > 5){doc.add("-".repeat(re.length()));}
+                
+            }//for(int p = 0; p < this.code.Tot(); p++)
+            
+            doc.add("");
+            
+            doc.add("-- " + 
+                    new Data().DataAbreviada(false) + 
+                    " -- " + 
+                    new Hora(true).getHora(true) + 
+                    " --"
+            );
             
             for(int x = 0; x < this.code.Tot(); x++){
                 

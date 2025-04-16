@@ -19,6 +19,8 @@ public class Files {
     
     private String opner;
     
+    private String arquivo;
+    
     private ArrayList<String> text = new ArrayList<>();
     
     private ArrayList<String> tema = new ArrayList<>();
@@ -32,14 +34,14 @@ public class Files {
             File menu = new File(this.opner);
 
             if(menu.createNewFile()){
+                
+                this.arquivo = "Arquivo: \"" + arq + "\" criado!";
 
-                System.out.println("Arquivo: \"" + arq + "\" criado!");
+            } else {
+                
+                this.arquivo = "";
 
-            }/* else {
-
-                System.out.println("\"" + arq + "\"");
-
-            }/*if(menu.createNewFile())*/
+            }//if(menu.createNewFile())
 
             Scanner reading = new Scanner(menu);
 
@@ -153,6 +155,8 @@ public class Files {
         }
         
     }//WriteAll(List<String> insert)
+    
+    public String Arq(){return this.arquivo;}
     
     public void WriteAll(String[] insert){
         
